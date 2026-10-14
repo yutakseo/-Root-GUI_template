@@ -1,0 +1,26 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Gradio: 자동 새로고침으로 실행",
+            "type": "shell",
+            "command": "C:\\Python314\\python.exe",
+            "args": [
+                "-m",
+                "gradio",
+                "template.py",
+                "--watch-dirs",
+                "."
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "isBackground": true,
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": []
+        }
+    ]
+}

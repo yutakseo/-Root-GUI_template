@@ -1,0 +1,17 @@
+<templates>
+  <template id="capture_label"><div class="section-label">CAPTURE <span>CAM-01</span></div></template>
+  <template id="lighting_label"><div class="section-label">LIGHTING</div></template>
+  <template id="lighting_hint"><div class="hint">Lighting profile: MATTE-04</div></template>
+  <template id="detection_label"><div class="section-label">DETECTION</div></template>
+  <template id="detection_hint"><div class="hint">Set the acceptance threshold.</div></template>
+
+  <template id="result_label"><div class="section-label">INSPECTION RESULT <span>LAST RUN</span></div></template>
+  <template id="summary_initial"><div class="summary"><div class="result-state pass">PASS</div><div class="result-number">97.25<small>%</small></div><div class="result-caption">Average match rate: ready</div></div></template>
+  <template id="points_label"><div class="section-label">POINT SCORES</div></template>
+  <template id="metrics_initial"><div class="metric-list"><div><span>P1</span><b>97.31%</b></div><div><span>P2</span><b>97.54%</b></div><div><span>P3</span><b>96.88%</b></div></div></template>
+  <template id="system_status"><div class="section-label">SYSTEM STATUS</div><div class="system-list"><div><span class="ok">&#9679;</span> CAMERA   READY</div><div><span class="ok">&#9679;</span> LIGHTING READY</div><div><span class="warn">&#9679;</span> PLC      IDLE</div><div><span class="ok">&#9679;</span> MODEL    LOADED</div></div></template>
+
+  <template id="metrics"><div class="metric-list"><div><span>P1</span><b>{p1:.2f}%</b></div><div><span>P2</span><b>{p2:.2f}%</b></div><div><span>P3</span><b>{p3:.2f}%</b></div></div></template>
+  <template id="summary"><div class="summary"><div class="result-state {state_class}">{state}</div><div class="result-number">{average:.2f}<small>%</small></div><div class="result-caption">Average match rate: {timestamp}</div></div></template>
+  <template id="head"><meta name="color-scheme" content="dark"/><style>html, body {{ height:100dvh !important; max-height:100dvh !important; overflow:hidden !important; }} body > gradio-app {{ display:block !important; height:100dvh !important; max-height:100dvh !important; overflow:hidden !important; }}</style></template>
+</templates>
