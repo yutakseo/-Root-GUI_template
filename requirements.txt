@@ -1,2 +1,4 @@
 gradio==6.29.1
 pyserial>=3.5,<4
+numpy>=1.26,<3
+pypylon>=4.1,<5
