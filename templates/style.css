@@ -51,6 +51,7 @@ footer, .built-with { display:none !important; }
 .lighting-dialog label { color:#c5c5c5 !important; font:11px 'IBM Plex Mono', monospace !important; }
 .lighting-close-button { margin-top:4px !important; }
 .lighting-close-button button { height:38px !important; border-radius:2px !important; box-shadow:none !important; }
+.serial-status { min-height:18px; margin:0 !important; color:var(--vsc-muted); font:10px 'IBM Plex Mono', monospace; line-height:1.45; word-break:break-all; }
 
 /* 중앙 블록: 측정 오버뷰 이미지와 실행 버튼 */
 .editor-tab { display:flex; align-items:center; gap:8px; height:32px; margin:-12px -12px 14px; padding:0 12px; border-bottom:1px solid var(--vsc-line); background:#252526; font-size:12px; color:#fff; }

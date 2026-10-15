@@ -5,6 +5,14 @@ from pathlib import Path
 from xml.etree import ElementTree
 
 import gradio as gr
+from led_control import (
+    BAUD_RATE,
+    COM_PORT,
+    OUTPUT_MAX,
+    LightCommunicationError,
+    set_channel_brightness,
+    set_four_brightness,
+)
 
 
 APP_DIR = Path(__file__).parent
@@ -97,6 +105,48 @@ def calculateLighting(
     average = sum((light_1, light_2, light_3, light_4)) / LIGHT_COUNT
     label = f"4-CH CONTROL  ·  AVG {average:.0f}"
     return average, label
+
+
+def applyLighting(
+    light_1: float,
+    light_2: float,
+    light_3: float,
+    light_4: float,
+) -> tuple[float, str, object, str]:
+    """Send all four channel settings to the lighting controller."""
+    values = (light_1, light_2, light_3, light_4)
+    average, label = calculateLighting(*values)
+    try:
+        transmissions = set_four_brightness(*values)
+    except (LightCommunicationError, ValueError) as error:
+        message = f"⚠ 전송 실패: {error}"
+        return average, label, gr.update(visible=True), message
+
+    frames = " · ".join(sent.packet.hex(" ").upper() for sent in transmissions)
+    message = f"✓ 전송 완료 ({COM_PORT}, {BAUD_RATE} bps): {frames}"
+    return average, label, gr.update(visible=False), message
+
+
+def applyLightChannel(
+    channel: int,
+    light_1: float,
+    light_2: float,
+    light_3: float,
+    light_4: float,
+) -> tuple[float, str, str]:
+    """Send only the slider channel after the user releases it."""
+    values = (light_1, light_2, light_3, light_4)
+    average, label = calculateLighting(*values)
+    try:
+        sent = set_channel_brightness(channel, values[channel - 1])
+    except (LightCommunicationError, ValueError) as error:
+        return average, label, f"⚠ CH{channel:02d} 전송 실패: {error}"
+
+    message = (
+        f"✓ CH{channel:02d} 적용 완료 ({COM_PORT}, {BAUD_RATE} bps): "
+        f"{sent.packet.hex(' ').upper()}"
+    )
+    return average, label, message
 
 
 def showLighting() -> object:
@@ -257,6 +307,12 @@ with gr.Blocks(title="Vision Workbench") as demo:
                 variant="primary",
                 elem_classes="lighting-close-button",
             )
+            serial_status = gr.Markdown(
+                f"통신 설정: `{COM_PORT}` · `{BAUD_RATE}` bps · 8N1 · 출력 0–`{OUTPUT_MAX}`",
+                elem_classes="serial-status",
+            )
+
+    light_controls = (light_1, light_2, light_3, light_4)
 
     lighting_button.click(
         showLighting,
@@ -264,17 +320,31 @@ with gr.Blocks(title="Vision Workbench") as demo:
         show_progress="hidden",
     )
     lighting_close.click(
-        hideLighting,
-        outputs=lighting_modal,
+        applyLighting,
+        inputs=light_controls,
+        outputs=[average_brightness, lighting_button, lighting_modal, serial_status],
         show_progress="hidden",
     )
 
-    light_controls = (light_1, light_2, light_3, light_4)
     for light_control in light_controls:
         light_control.change(
             calculateLighting,
             inputs=light_controls,
             outputs=[average_brightness, lighting_button],
+            show_progress="hidden",
+        )
+
+    for channel, light_control in enumerate(light_controls, start=1):
+        light_control.release(
+            lambda light_1, light_2, light_3, light_4, selected_channel=channel: applyLightChannel(
+                selected_channel,
+                light_1,
+                light_2,
+                light_3,
+                light_4,
+            ),
+            inputs=light_controls,
+            outputs=[average_brightness, lighting_button, serial_status],
             show_progress="hidden",
         )
 
