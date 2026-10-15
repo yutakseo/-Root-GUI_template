@@ -13,6 +13,7 @@ footer, .built-with { display:none !important; }
 .side { max-width:280px !important; min-width:230px !important; background:#252526; border-right:1px solid var(--vsc-line); padding:14px !important; }
 .workbench { background:#1e1e1e; padding:14px !important; min-width:480px !important; }
 .results { max-width:310px !important; min-width:250px !important; background:#252526; border-left:1px solid var(--vsc-line); padding:14px !important; }
+.side > .ui-block { flex:0 0 auto !important; }
 
 /* 공통 카드: 모든 정보 블록의 테두리·여백을 통일합니다. */
 .ui-block { background:#202020; border:1px solid var(--vsc-line); padding:12px !important; margin:0 0 12px !important; box-shadow:inset 0 1px rgba(255,255,255,.015); }
@@ -26,9 +27,30 @@ footer, .built-with { display:none !important; }
 .control-group { margin:0 !important; padding:0 !important; border:0 !important; }
 .control-group label { color:#c5c5c5 !important; font-size:12px !important; }
 .control-group input[type=range] { accent-color:var(--vsc-blue); }
+.lighting-open-button { margin:0 !important; }
+.lighting-open-button button { height:38px !important; justify-content:flex-start !important; border:1px solid #3c3c3c !important; border-radius:2px !important; background:#2d2d30 !important; color:#d7d7d7 !important; font:11px 'IBM Plex Mono', monospace !important; white-space:nowrap !important; box-shadow:none !important; }
+.lighting-open-button button:before { content:'☼'; margin-right:8px; color:#d7ba7d; font-size:14px; }
+.threshold-preset-label { margin:9px 0 5px; color:var(--vsc-muted); font:9px 'IBM Plex Mono', monospace; letter-spacing:.45px; }
+.threshold-presets { margin:0 !important; }
+.threshold-presets .wrap { display:grid !important; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:5px !important; }
+.threshold-presets label { min-width:0 !important; justify-content:center; padding:5px 4px !important; border:1px solid #3c3c3c; border-radius:2px; background:#2d2d30; font:10px 'IBM Plex Mono', monospace !important; }
+.threshold-presets label:has(input:checked) { border-color:var(--vsc-blue); background:#173b57; color:#fff !important; }
 .hint { color:var(--vsc-muted); font-size:11px; line-height:1.6; margin-top:7px; }
 .system-list { margin:0; font:11px 'IBM Plex Mono', monospace; line-height:2; color:#9d9d9d; }
 .ok { color:var(--vsc-green); }.warn { color:#d7ba7d; }
+
+/* 4채널 조명 상세 제어 팝업 */
+.lighting-modal { position:fixed !important; inset:0 !important; z-index:1000 !important; max-width:none !important; width:100vw !important; height:100dvh !important; margin:0 !important; padding:24px !important; align-items:center !important; justify-content:center !important; background:rgba(0,0,0,.72) !important; backdrop-filter:blur(3px); }
+.lighting-dialog { width:min(520px, calc(100vw - 32px)) !important; max-width:520px !important; max-height:calc(100dvh - 48px); overflow:auto; padding:20px !important; background:#202020 !important; border:1px solid #4a4a4a !important; box-shadow:0 18px 54px rgba(0,0,0,.55); }
+.lighting-modal-header { padding-bottom:12px; border-bottom:1px solid #3c3c3c; }
+.lighting-modal-header > div { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.lighting-modal-header b { color:#f0f0f0; font:700 13px 'IBM Plex Mono', monospace; letter-spacing:.45px; }
+.lighting-modal-header span { color:var(--vsc-blue); font:10px 'IBM Plex Mono', monospace; }
+.lighting-modal-header p { margin:8px 0 0; color:var(--vsc-muted); font-size:11px; line-height:1.5; }
+.lighting-dialog .form { gap:12px !important; }
+.lighting-dialog label { color:#c5c5c5 !important; font:11px 'IBM Plex Mono', monospace !important; }
+.lighting-close-button { margin-top:4px !important; }
+.lighting-close-button button { height:38px !important; border-radius:2px !important; box-shadow:none !important; }
 
 /* 중앙 블록: 측정 오버뷰 이미지와 실행 버튼 */
 .editor-tab { display:flex; align-items:center; gap:8px; height:32px; margin:-12px -12px 14px; padding:0 12px; border-bottom:1px solid var(--vsc-line); background:#252526; font-size:12px; color:#fff; }
@@ -38,7 +60,7 @@ footer, .built-with { display:none !important; }
 .viewport img { width:100%; height:100%; object-fit:contain; display:block; }
 .legacy-details { display:none !important; }
 .workbench > .ui-block:first-child .viewport:not(.overview-viewport) { display:none; }
-.inspection-layout { display:grid; grid-template-columns:minmax(0, 1fr); grid-template-rows:minmax(0, 1fr) clamp(130px, 20vh, 180px); gap:12px; flex:1; min-height:0; }
+.inspection-layout { display:grid; grid-template-columns:minmax(0, 1fr); grid-template-rows:repeat(2, minmax(0, 1fr)); gap:12px; flex:1; min-height:0; }
 .inspection-layout .overview-viewport { width:100%; height:100%; }
 .inspection-layout .point-details { position:static; width:auto; height:auto; min-height:0; align-self:stretch; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); grid-template-rows:minmax(0, 1fr); gap:8px; overflow:hidden; }
 .inspection-layout .detail-card { height:100%; min-height:0; overflow:hidden; }
@@ -61,13 +83,25 @@ footer, .built-with { display:none !important; }
 .overview-inspect-button button:before { content:'▶'; font-size:10px; margin-right:8px; }
 .workbench > .ui-block:nth-child(2) { display:none; }
 
-/* 우측 블록: PASS/CHECK 상태와 측정 포인트 점수 */
+/* 우측 블록: PASS/CHECK 상태와 포인트별 함침률 이력 */
 .summary { padding:0; }.result-state { display:inline-block; border:1px solid; border-radius:2px; padding:3px 7px; font:11px 'IBM Plex Mono', monospace; letter-spacing:.5px; }
 .result-state.pass { color:var(--vsc-green); border-color:#4b704a; background:#203222; }.result-state.check { color:#d7ba7d; border-color:#735f2e; background:#352e1d; }
 .result-number { margin-top:14px; color:#fff; font:600 38px 'IBM Plex Mono', monospace; letter-spacing:-2px; }.result-number small { color:var(--vsc-muted); font-size:15px; letter-spacing:0; margin-left:4px; }
 .result-caption { margin-top:3px; color:var(--vsc-muted); font-size:11px; }
-.metric-list { margin:0; font:12px 'IBM Plex Mono', monospace; }.metric-list div { display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px solid #333; }
-.metric-list span { color:#9cdcfe; }.metric-list b { color:#dcdcaa; font-weight:400; }
+.point-scores { margin-top:14px; padding-top:10px; border-top:1px solid #333; }
+.point-scores-label { margin-bottom:3px; color:#bbbbbb; font-size:10px; font-weight:700; letter-spacing:.55px; }
+.metric-list { margin:0; font:11px 'IBM Plex Mono', monospace; }
+.metric-list div { display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #303030; }
+.metric-list span { color:#9cdcfe; }
+.metric-list b { color:#dcdcaa; font-weight:400; }
+.history-list { margin:0; font:12px 'IBM Plex Mono', monospace; }
+.history-head, .history-row { display:grid; grid-template-columns:24px repeat(3, minmax(0, 1fr)); align-items:center; gap:5px; }
+.history-head { padding:0 0 7px; border-bottom:1px solid #444; color:#9cdcfe; font-size:9px; }
+.history-head span:not(:first-child) { text-align:right; }
+.history-row { padding:8px 0; border-bottom:1px solid #333; }
+.history-index { color:var(--vsc-muted); font-size:11px; }
+.history-row b { color:#dcdcaa; font-size:10px; font-weight:400; text-align:right; white-space:nowrap; }
+.history-row.is-empty b { color:#555; }
 
 /* [수정 5] 데스크톱: 한 화면 표시, 세로 스크롤 금지 */
 @media (min-width:1000px) {
