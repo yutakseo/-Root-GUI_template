@@ -1,4 +1,4 @@
-"""LS1506~12A-R(CE) 4-channel LED brightness controller protocol."""
+"""LS1506~12A-R(CE) four-channel LED-control module."""
 
 from dataclasses import dataclass
 from os import getenv

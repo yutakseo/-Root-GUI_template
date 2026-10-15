@@ -5,7 +5,7 @@ from pathlib import Path
 from xml.etree import ElementTree
 
 import gradio as gr
-from led_control import (
+from scripts.led_control import (
     BAUD_RATE,
     COM_PORT,
     OUTPUT_MAX,

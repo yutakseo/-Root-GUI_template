@@ -1,4 +1,4 @@
-"""Basler pylon camera control for the Vision Workbench.
+"""Basler pylon camera-control module for the Vision Workbench.
 
 This module is adapted to the Basler-camera control project supplied with this
 workspace. It owns one pypylon camera, continuously acquires only the newest
